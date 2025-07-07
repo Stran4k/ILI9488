@@ -26,7 +26,7 @@
       gpio_init( SPI1_PORT, GPIO_MODE_AF_PP,        GPIO_OSPEED_50MHZ, SPI1_PIN_MOSI);// Sending data   MOSI
 */
 #include "main.h"
-#define SPI_DMA_MODE 0  // 1 or 0-dma  // | need correct  long symbol in font
+#define SPI_DMA_MODE 0  // 0 or 1-dma  // | need correct  long symbol in font
 
 static unsigned int WIDTH  = 480; 
 static unsigned int HEIGHT = 320;
