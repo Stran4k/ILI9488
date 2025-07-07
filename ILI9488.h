@@ -4,10 +4,6 @@
 
 //#include "font.h"
 /*
-    rcu_periph_clock_enable(RCU_GPIOB);
-    rcu_periph_clock_enable(RCU_SPI1);
-    rcu_periph_clock_enable(RCU_DMA0); 
-    
 #define SPI1_PORT						      GPIOB
 #define SPI1_PIN_SCK					    GPIO_PIN_13
 #define SPI1_PIN_MISO					    GPIO_PIN_14
@@ -15,15 +11,19 @@
 #define SPI1_PIN_CS						    GPIO_PIN_12 //NSS
 #define TFT_PORT						      GPIOB
 #define TFT_PIN_RST						    GPIO_PIN_11
-#define TFT_PIN_DC						    GPIO_PIN_10
-
-  gpio_init( TFT_PORT, GPIO_MODE_OUT_PP,        GPIO_OSPEED_50MHZ, TFT_PIN_DC  ); // Переключение команда/данные | A0/DC
-  gpio_init( TFT_PORT, GPIO_MODE_OUT_PP,        GPIO_OSPEED_50MHZ, TFT_PIN_RST ); // Сброс экрана | RST  
+#define TFT_PIN_DC						    GPIO_PIN_10  
+    
+      rcu_periph_clock_enable(RCU_GPIOB);
+      rcu_periph_clock_enable(RCU_SPI1);
+      rcu_periph_clock_enable(RCU_DMA0); 
+    
+      gpio_init( TFT_PORT, GPIO_MODE_OUT_PP,        GPIO_OSPEED_50MHZ, TFT_PIN_DC  ); // Command/data switching | A0/DC
+      gpio_init( TFT_PORT, GPIO_MODE_OUT_PP,        GPIO_OSPEED_50MHZ, TFT_PIN_RST ); // Resetr LCD |   RST  
   
-  gpio_init( SPI1_PORT, GPIO_MODE_OUT_PP,       GPIO_OSPEED_50MHZ, SPI1_PIN_CS);  // Выбор устройства CS
-  gpio_init( SPI1_PORT, GPIO_MODE_AF_PP,        GPIO_OSPEED_50MHZ, SPI1_PIN_SCK); // SCLK
-  gpio_init( SPI1_PORT, GPIO_MODE_IN_FLOATING,  GPIO_OSPEED_50MHZ, SPI1_PIN_MISO);// Прием данных MISO
-  gpio_init( SPI1_PORT, GPIO_MODE_AF_PP,        GPIO_OSPEED_50MHZ, SPI1_PIN_MOSI);// Отправка данных MOSI
+      gpio_init( SPI1_PORT, GPIO_MODE_OUT_PP,       GPIO_OSPEED_50MHZ, SPI1_PIN_CS);  // Switch device  CS
+      gpio_init( SPI1_PORT, GPIO_MODE_AF_PP,        GPIO_OSPEED_50MHZ, SPI1_PIN_SCK); // SCLK
+      gpio_init( SPI1_PORT, GPIO_MODE_IN_FLOATING,  GPIO_OSPEED_50MHZ, SPI1_PIN_MISO);// Receiving data MISO
+      gpio_init( SPI1_PORT, GPIO_MODE_AF_PP,        GPIO_OSPEED_50MHZ, SPI1_PIN_MOSI);// Sending data   MOSI
 */
 #include "main.h"
 #define SPI_DMA_MODE 0  // 1 or 0-dma  // | need correct  long symbol in font
@@ -56,10 +56,10 @@ static unsigned int HEIGHT = 320;
 #define ILI9488_RDDID	  	0x04
 #define ILI9488_RDDST	  	0x09
 
-#define ILI9488_SLPIN		  0x10
+#define ILI9488_SLPIN		0x10
 #define ILI9488_SLPOUT		0x11
-#define ILI9488_PTLON		  0x12
-#define ILI9488_NORON		  0x13
+#define ILI9488_PTLON		0x12
+#define ILI9488_NORON		0x13
 
 #define ILI9488_RDMODE		0x0A
 #define ILI9488_RDMADCTL	0x0B
@@ -68,17 +68,17 @@ static unsigned int HEIGHT = 320;
 #define ILI9488_RDSELFDIAG  0x0F
 
 #define ILI9488_INVOFF		0x20
-#define ILI9488_INVON		  0x21
+#define ILI9488_INVON	    0x21
 #define ILI9488_GAMMASET	0x26
 #define ILI9488_DISPOFF		0x28
 #define ILI9488_DISPON		0x29
 
-#define ILI9488_CASET		  0x2A
-#define ILI9488_PASET		  0x2B
-#define ILI9488_RAMWR		  0x2C
-#define ILI9488_RAMRD		  0x2E
+#define ILI9488_CASET		0x2A
+#define ILI9488_PASET		0x2B
+#define ILI9488_RAMWR		0x2C
+#define ILI9488_RAMRD		0x2E
 
-#define ILI9488_PTLAR		  0x30
+#define ILI9488_PTLAR		0x30
 #define ILI9488_MADCTL		0x36
 #define ILI9488_PIXFMT		0x3A
 
@@ -96,9 +96,9 @@ static unsigned int HEIGHT = 320;
 #define ILI9488_VMCTR1		0xC5
 #define ILI9488_VMCTR2		0xC7
 
-#define ILI9488_RDID1		  0xDA
-#define ILI9488_RDID2		  0xDB
-#define ILI9488_RDID3		  0xDC
+#define ILI9488_RDID1		0xDA
+#define ILI9488_RDID2		0xDB
+#define ILI9488_RDID3		0xDC
 #define ILI9488_RDID4	  	0xDD
 
 #define ILI9488_GMCTRP1		0xE0
@@ -149,14 +149,14 @@ static unsigned int HEIGHT = 320;
 
 
 
-#define LCD_CS_0        gpio_bit_reset	(SPI1_PORT, SPI1_PIN_CS)
+#define LCD_CS_0        gpio_bit_reset	  (SPI1_PORT, SPI1_PIN_CS)
 #define LCD_CS_1        gpio_bit_set	  (SPI1_PORT, SPI1_PIN_CS)
 
-#define LCD_RST_0       gpio_bit_reset	(TFT_PORT,  TFT_PIN_RST)
+#define LCD_RST_0       gpio_bit_reset	  (TFT_PORT,  TFT_PIN_RST)
 #define LCD_RST_1       gpio_bit_set	  (TFT_PORT,  TFT_PIN_RST)
 
-#define LCD_DC_0        gpio_bit_reset	(TFT_PORT,  TFT_PIN_DC)
-#define LCD_DC_1        gpio_bit_set   	(TFT_PORT,  TFT_PIN_DC)
+#define LCD_DC_0        gpio_bit_reset	  (TFT_PORT,  TFT_PIN_DC)
+#define LCD_DC_1        gpio_bit_set   	  (TFT_PORT,  TFT_PIN_DC)
 
 #if (SPI_DMA_MODE==1)
  void dma0_spi1_config         (void);
