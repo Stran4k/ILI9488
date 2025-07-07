@@ -36,12 +36,12 @@ volatile static uint16_t buffer_counter = 0;
 	{
 		/* SPI1 transmit dma config: DMA0,DMA_CH4  */
     dma_channel_disable(DMA0, DMA_CH4);
-    // Сбрасываем флаги DMA 
+    // Dropping the flags DMA 
     dma_flag_clear(DMA0, DMA_CH4, DMA_FLAG_G);
-    // Перезагружаем настройки DMA
-    dma_memory_address_config(DMA0, DMA_CH4, (uint32_t)data); // Указываем адрес буфера
-    dma_transfer_number_config(DMA0, DMA_CH4, len);     // Указываем количество данных
-    // Запускаем DMA заново 
+    // Reloading the DMA settings
+    dma_memory_address_config(DMA0, DMA_CH4, (uint32_t)data);
+    dma_transfer_number_config(DMA0, DMA_CH4, len);
+    //Starting DMA again
     dma_interrupt_flag_clear(DMA0, DMA_CH4, DMA_INT_FLAG_FTF);
     dma_channel_enable(DMA0, DMA_CH4);
 	} 
@@ -69,7 +69,7 @@ volatile static uint16_t buffer_counter = 0;
     nvic_irq_enable(DMA0_Channel4_IRQn,    1, 5);  
 	}
 
-	void  DMA0_Channel4_IRQHandler(void)   /// DMA0_Channel4_IRQHandler  SPI1_IRQHandler
+	void  DMA0_Channel4_IRQHandler(void)
 	{
 		if (dma_interrupt_flag_get(DMA0, DMA_CH4, DMA_INT_FLAG_FTF)) {
 			if (!spi_i2s_flag_get(SPI1, SPI_FLAG_TRANS)) {
@@ -94,13 +94,13 @@ void SPI1_config(void)  // spi2 dma1 ch1
 		spi_i2s_deinit(SPI1);
 
 	/* SPI0 parameter config */
-		spi1_init.trans_mode		      	  = SPI_TRANSMODE_FULLDUPLEX;
-		spi1_init.device_mode		      	  = SPI_MASTER;
-		spi1_init.frame_size			        = SPI_FRAMESIZE_8BIT;
+		spi1_init.trans_mode		  = SPI_TRANSMODE_FULLDUPLEX;
+		spi1_init.device_mode		  = SPI_MASTER;
+		spi1_init.frame_size		  = SPI_FRAMESIZE_8BIT;
 		spi1_init.clock_polarity_phase	  = SPI_CK_PL_LOW_PH_1EDGE;
-		spi1_init.nss					            = SPI_NSS_SOFT;
-		spi1_init.prescale				        = SPI_PSC_2;					// Fspi1=72MHz/4=18MHz
-		spi1_init.endian				          = SPI_ENDIAN_MSB;
+		spi1_init.nss			  = SPI_NSS_SOFT;
+		spi1_init.prescale		  = SPI_PSC_2;					
+		spi1_init.endian		  = SPI_ENDIAN_MSB;
 		spi_init(SPI1, &spi1_init);
   
 #if (SPI_DMA_MODE == 1)
